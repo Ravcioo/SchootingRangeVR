@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class CollisionManager : MonoBehaviour
 {
 
-    private static List<CustomSphereCollider> colliders;
+    private static List<CustomCollider> colliders;
     public static CollisionManager Instance = null;                                     
 
    
@@ -18,12 +18,12 @@ public class CollisionManager : MonoBehaviour
     }
 
 
-    
-    public void AddCollider(CustomSphereCollider collider)
+
+    public void AddCollider(CustomCollider collider)
     {
         if (colliders == null)
         {
-            colliders = new List<CustomSphereCollider>();
+            colliders = new List<CustomCollider>();
         }
         colliders.Add(collider);
     }
