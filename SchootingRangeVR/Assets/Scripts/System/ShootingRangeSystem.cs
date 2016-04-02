@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
-public class ShootingRangeSystem : MonoBehaviour {
+public class ShootingRangeSystem : Singleton<ShootingRangeSystem> {
 
-	// Use this for initialization
-	void Start () {
+    [SerializeField]
+    private Text pointText;
+
+    private int totalPoints = 0;
+
+    public void AddPoints(int value)
+    {
+        totalPoints += value;
+        pointText.text = totalPoints.ToString();
+    }
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
