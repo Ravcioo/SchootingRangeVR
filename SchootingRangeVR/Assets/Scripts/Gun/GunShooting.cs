@@ -41,7 +41,6 @@ public class GunShooting : MonoBehaviour {
             }
 
             //Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
-
         }     
     }
 

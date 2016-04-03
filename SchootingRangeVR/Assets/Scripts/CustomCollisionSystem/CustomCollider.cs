@@ -13,22 +13,30 @@ public abstract class CustomCollider : MonoBehaviour {
         CollisionManager.Instance.AddCollider(this);
     }
 
-    public void CheckCollision(CustomCollider collider)
+    public bool CheckCollision(CustomCollider collider)
     {
 
         if (collider is CustomBoxCollider)
         {
-            CollisionWithBox(collider as CustomBoxCollider);
+            return CollisionWithBox(collider as CustomBoxCollider);
         }
         if (collider is CustomSphereCollider)
         {
-            CollisionWithSphere(collider as CustomSphereCollider);
+            return CollisionWithSphere(collider as CustomSphereCollider);
         }
+        return false;
+    }
+    public bool CheckCollision(Vector3 point)
+    {
+        return CollisionWithPoint(point);
     }
 
-    protected abstract void CollisionWithBox(CustomBoxCollider collider);
+    public abstract bool Ray(Vector3 from, Vector3 to);
+    protected abstract bool CollisionWithPoint(Vector3 point);
 
-    protected abstract void CollisionWithSphere(CustomSphereCollider collider);
+    protected abstract bool CollisionWithBox(CustomBoxCollider collider);
+
+    protected abstract bool CollisionWithSphere(CustomSphereCollider collider);
 
     protected abstract void DrawCollider(bool enable);
 
