@@ -6,6 +6,8 @@ public class CustomSphereCollider : CustomCollider
     public GameObject prefab;
 
     [SerializeField]
+    private bool useAsCircle;
+    [SerializeField]
     private float radius;
     public float Radius { get { return radius; } set { radius = value; } }
 
@@ -14,8 +16,19 @@ public class CustomSphereCollider : CustomCollider
     {
         Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));
         rayDirection.Normalize();
-        CustomPlane plane = new CustomPlane(rayDirection, this.Position);
-        Vector3 crossPointOnPlane = plane.GetProjectionOfPoint(origin);
+        CustomPlane  plane;
+        Vector3 crossPointOnPlane;
+        if (!useAsCircle)
+        {
+            plane = new CustomPlane(rayDirection, this.Position);
+            crossPointOnPlane = plane.GetProjectionOfPoint(origin);
+        }
+        else
+	    {
+            plane = new CustomPlane(this.transform.forward, this.Position);
+            crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection  );
+	    }
+        
         Vector3 originToCrossPointVector = origin - crossPointOnPlane;
         bool isSphereBesideRay = CheckIfIsBeside(originToCrossPointVector,rayDirection);
         float originToSphere = Vector3.Distance(origin,this.Position);  
