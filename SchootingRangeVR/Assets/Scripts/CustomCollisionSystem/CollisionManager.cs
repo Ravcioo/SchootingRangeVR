@@ -4,9 +4,11 @@ using System.Collections.Generic;
 public class CollisionManager : MonoBehaviour
 {
 
-    private static List<CustomCollider> colliders;
     public static CollisionManager Instance = null;                                     
 
+    private static List<CustomCollider> colliders;
+    public List<CustomCollider> Colliders { get { return colliders; } private set { ;} }
+    
    
     void Awake()
     {
@@ -16,8 +18,6 @@ public class CollisionManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
     }
-
-
 
     public void AddCollider(CustomCollider collider)
     {
@@ -36,6 +36,21 @@ public class CollisionManager : MonoBehaviour
             {
                 colliders[i].CheckCollision(colliders[j]);
             }
+        }
+    }
+
+    void Update()
+    {
+        /*if (Input.GetKeyDown(KeyCode.A))
+        {
+            Ray();
+        }*/
+    }
+    public void Ray(Vector3 from, Vector3 to)
+    {
+        foreach (var item in colliders)
+        {
+            item.Ray(from, to);
         }
     }
 

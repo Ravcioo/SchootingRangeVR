@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CustomBoxCollider : CustomCollider
 {
+    public GameObject prefab;
 
     [SerializeField]
     private Vector3 size;
@@ -17,7 +18,50 @@ public class CustomBoxCollider : CustomCollider
     public float MinZ { get { return transform.position.z - Size.z / 2; } private set { ;} }
 
 
-    protected override void CollisionWithSphere(CustomSphereCollider collider)
+    public override bool Ray(Vector3 origin, Vector3 to)
+    {
+        Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));
+        rayDirection.Normalize();
+        CustomPlane plane = new CustomPlane(this.transform.forward, this.Position);
+        Vector3 crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection);
+        Vector3 originToCrossPointVector = origin - crossPointOnPlane;
+        bool isBoxBesideRay = CheckIfIsBeside(originToCrossPointVector, rayDirection);
+        
+        if (!isBoxBesideRay && CollisionWithPoint(crossPointOnPlane))
+        {
+            Instantiate(prefab, crossPointOnPlane, Quaternion.identity);
+            Debug.Log("Ray");
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CheckIfIsBeside(Vector3 offset, Vector3 rayDirection)
+    {
+        bool isSphereBesideRay = true;
+        if (!Mathf.Approximately(offset.x, 0.0f))
+        {
+            isSphereBesideRay &= Mathf.Sign(offset.x) == Mathf.Sign(rayDirection.x);
+        }
+        if (!Mathf.Approximately(offset.y, 0.0f))
+        {
+            isSphereBesideRay &= Mathf.Sign(offset.y) == Mathf.Sign(rayDirection.y);
+        }
+        if (!Mathf.Approximately(offset.z, 0.0f))
+        {
+            isSphereBesideRay &= Mathf.Sign(offset.z) == Mathf.Sign(rayDirection.z);
+        }
+        return isSphereBesideRay;
+    }
+    protected override bool CollisionWithPoint(Vector3 point) {
+        bool intersect = (point.x >= this.MinX && point.x <= this.MaxX) &&
+                         (point.y >= this.MinY && point.y <= this.MaxY) &&
+                         (point.z >= this.MinZ && point.z <= this.MaxZ);
+      
+        return (intersect) ;
+    }
+    protected override bool CollisionWithSphere(CustomSphereCollider collider)
     {
         Vector3 closestPoint;
         closestPoint.x = Mathf.Max(this.MinX, Mathf.Min(collider.Position.x, this.MaxX));
@@ -29,21 +73,15 @@ public class CustomBoxCollider : CustomCollider
                                  (closestPoint.y - collider.Position.y) * (closestPoint.y - collider.Position.y) +
                                  (closestPoint.z - collider.Position.z) * (closestPoint.z - collider.Position.z));
 
-        if (distance < collider.Radius)
-        {
-            Debug.Log("Collision");
-        }
+        return (distance < collider.Radius) ;
     }
 
-    protected override void CollisionWithBox(CustomBoxCollider collider)
+    protected override bool CollisionWithBox(CustomBoxCollider collider)
     {
         bool collisionX = this.MaxX >= collider.MinX && this.MinX <= collider.MaxX;
         bool collisionY = this.MaxY >= collider.MinY && this.MinY <= collider.MaxY;
         bool collisionZ = this.MaxZ >= collider.MinZ && this.MinZ <= collider.MaxZ;
-        if (collisionX && collisionY && collisionZ)
-        {
-            Debug.Log("collision");
-        }
+        return (collisionX && collisionY && collisionZ) ;
     }
 
     protected override void DrawCollider(bool enable)
