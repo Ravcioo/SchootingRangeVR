@@ -4,7 +4,13 @@ using System.Collections;
 public class GunShooting : MonoBehaviour {
 
     [SerializeField]
+    private float muzzleflashTime = 0.05f;
+
+    [Header("References")]
+    [SerializeField]
     private Camera mainCamera;
+    [SerializeField]
+    private GameObject muzzleFlash;
 
     private AudioSource audioSource;
 
@@ -18,6 +24,7 @@ public class GunShooting : MonoBehaviour {
         if(Input.GetButtonDown("Fire1"))
         {
             audioSource.Play();
+            ShowMuzzleFlash(muzzleflashTime);
 
             Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
             RaycastHit hit;
@@ -33,11 +40,21 @@ public class GunShooting : MonoBehaviour {
                 }
             }
 
-            Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
+            //Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
 
-        }
+        }     
+    }
 
-        
+    private void ShowMuzzleFlash(float time)
+    {
+        StartCoroutine(ShowMuzzleFlashCoroutine(time));
+    }
+
+    private IEnumerator ShowMuzzleFlashCoroutine(float time)
+    {
+        muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(time);
+        muzzleFlash.SetActive(false);
     }
 	
 }

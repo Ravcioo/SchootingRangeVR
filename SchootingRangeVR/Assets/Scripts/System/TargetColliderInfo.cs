@@ -6,10 +6,22 @@ public class TargetColliderInfo : MonoBehaviour {
     [SerializeField]
     private int points = 1;
 
+    private Target target;
+
+    void Awake()
+    {
+        target = GetComponentInParent<Target>();
+    }
+
     public void OnHit()
     {
-        ShootingRangeSystem.Instance.AddPoints(points);
-        GetComponent<AudioSource>().Play();
+        if(target.isActiveTarget)
+        {
+            ShootingRangeSystem.Instance.AddPoints(points);
+            GetComponent<AudioSource>().Play();
+            target.OnHit();
+        }
+        
     }
 
 

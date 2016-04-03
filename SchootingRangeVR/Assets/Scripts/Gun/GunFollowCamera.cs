@@ -7,10 +7,12 @@ public class GunFollowCamera : MonoBehaviour {
     private Camera targetCamera;
 
     Vector3 rotationOffset;
+    Rigidbody rigBody;
 
     void Start()
     {
         rotationOffset = targetCamera.transform.rotation.eulerAngles - transform.rotation.eulerAngles;
+        rigBody = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -18,7 +20,7 @@ public class GunFollowCamera : MonoBehaviour {
         Vector3 targetRotation = targetCamera.transform.rotation.eulerAngles;
         targetRotation.x *= -1;
         targetRotation += rotationOffset;
-        
-        transform.rotation = Quaternion.Slerp(transform.rotation,  Quaternion.Euler(targetRotation), 100 * Time.deltaTime);
+
+        rigBody.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(targetRotation), 100 * Time.deltaTime);
     }
 }
