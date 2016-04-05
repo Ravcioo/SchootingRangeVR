@@ -34,7 +34,10 @@ public class CollisionManager : MonoBehaviour
         {
             for (int j = i + 1; j < colliders.Count; j++)
             {
-                colliders[i].CheckCollision(colliders[j]);
+                if (colliders[i].gameObject.activeInHierarchy && colliders[j].gameObject.activeInHierarchy)
+                {
+                    colliders[i].CheckCollision(colliders[j]);
+                }
             }
         }
     }
@@ -44,7 +47,10 @@ public class CollisionManager : MonoBehaviour
         outHit = new CustomRayHit();
         foreach (var item in colliders)
         {
-            item.Ray(ray.Origin, ray.Direction * 1000, out outHit);
+            if (item.gameObject.activeInHierarchy)
+            {
+                item.Ray(ray.Origin, ray.Direction * 1000, ref outHit);
+            }
         }
         return outHit.IsHit;
     }

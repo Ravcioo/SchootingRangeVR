@@ -10,7 +10,7 @@ public class CustomSphereCollider : CustomCollider
     public float Radius { get { return radius; } set { radius = value; } }
 
 
-    public override bool Ray(Vector3 origin, Vector3 to, out CustomRayHit outHit)
+    public override bool Ray(Vector3 origin, Vector3 to, ref CustomRayHit outHit)
     {
         outHit = new CustomRayHit();
         Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));

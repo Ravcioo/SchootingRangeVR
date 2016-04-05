@@ -18,9 +18,8 @@ public class CustomBoxCollider : CustomCollider
     public float MinZ { get { return transform.position.z - Size.z / 2; } private set { ;} }
 
 
-    public override bool Ray(Vector3 origin, Vector3 to, out CustomRayHit outHit)
+    public override bool Ray(Vector3 origin, Vector3 to, ref CustomRayHit outHit)
     {
-        outHit = new CustomRayHit();
         Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));
         rayDirection.Normalize();
         CustomPlane plane = null;
