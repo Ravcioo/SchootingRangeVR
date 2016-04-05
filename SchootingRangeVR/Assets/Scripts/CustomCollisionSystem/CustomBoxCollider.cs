@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CustomBoxCollider : CustomCollider
 {
-    public GameObject prefab;
-
+    [SerializeField]
+    private bool useAsPlane;
     [SerializeField]
     private Vector3 size;
 
@@ -18,19 +18,34 @@ public class CustomBoxCollider : CustomCollider
     public float MinZ { get { return transform.position.z - Size.z / 2; } private set { ;} }
 
 
-    public override bool Ray(Vector3 origin, Vector3 to)
+    public override bool Ray(Vector3 origin, Vector3 to, out CustomRayHit outHit)
     {
+        outHit = new CustomRayHit();
         Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));
         rayDirection.Normalize();
-        CustomPlane plane = new CustomPlane(this.transform.forward, this.Position);
+        CustomPlane plane = null;
+        if (useAsPlane)
+        {
+            plane = new CustomPlane(this.transform.forward, this.Position);
+        }
+        else
+        {
+            Debug.LogError("Boxes are currently can be raycasting only if are using as plane");
+        }
+        
         Vector3 crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection);
         Vector3 originToCrossPointVector = origin - crossPointOnPlane;
         bool isBoxBesideRay = CheckIfIsBeside(originToCrossPointVector, rayDirection);
         
         if (!isBoxBesideRay && CollisionWithPoint(crossPointOnPlane))
         {
-            Instantiate(prefab, crossPointOnPlane, Quaternion.identity);
+            
+            outHit.IsHit = true;
+            outHit.HitPosition = crossPointOnPlane;
+            outHit.HitCollider = this;
+            outHit.HitObject = this.gameObject;
             Debug.Log("Ray");
+
             return true;
         }
 

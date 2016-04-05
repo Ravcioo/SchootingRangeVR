@@ -39,19 +39,14 @@ public class CollisionManager : MonoBehaviour
         }
     }
 
-    void Update()
+    public bool Raycast(CustomRay ray, out CustomRayHit outHit)
     {
-        /*if (Input.GetKeyDown(KeyCode.A))
-        {
-            Ray();
-        }*/
-    }
-    public void Ray(Vector3 from, Vector3 to)
-    {
+        outHit = new CustomRayHit();
         foreach (var item in colliders)
         {
-            item.Ray(from, to);
+            item.Ray(ray.Origin, ray.Direction * 1000, out outHit);
         }
+        return outHit.IsHit;
     }
 
 

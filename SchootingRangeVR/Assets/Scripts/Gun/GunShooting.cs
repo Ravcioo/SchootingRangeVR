@@ -26,21 +26,21 @@ public class GunShooting : MonoBehaviour {
             audioSource.Play();
             ShowMuzzleFlash(muzzleflashTime);
 
-            Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
-            RaycastHit hit;
+            CustomRay customRay = new CustomRay(mainCamera.transform.position, mainCamera.transform.forward);
+            CustomRayHit customRayHit;
 
-            if(Physics.Raycast(ray,out hit,Mathf.Infinity))
+            if (CollisionManager.Instance.Raycast(customRay, out customRayHit))
             {
-              
-                TargetColliderInfo targetColliderInfo = hit.transform.GetComponent<TargetColliderInfo>();
 
-                if(targetColliderInfo != null)
+                TargetColliderInfo targetColliderInfo = customRayHit.HitObject.GetComponent<TargetColliderInfo>();
+
+                if (targetColliderInfo != null)
                 {
                     targetColliderInfo.OnHit();
                 }
             }
 
-            //Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
+            Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
         }     
     }
 

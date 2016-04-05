@@ -31,7 +31,7 @@ public abstract class CustomCollider : MonoBehaviour {
         return CollisionWithPoint(point);
     }
 
-    public abstract bool Ray(Vector3 from, Vector3 to);
+    public abstract bool Ray(Vector3 from, Vector3 to, out CustomRayHit outHit);
     protected abstract bool CollisionWithPoint(Vector3 point);
 
     protected abstract bool CollisionWithBox(CustomBoxCollider collider);
