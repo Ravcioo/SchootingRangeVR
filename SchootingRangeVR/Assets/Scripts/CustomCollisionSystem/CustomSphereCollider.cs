@@ -12,7 +12,6 @@ public class CustomSphereCollider : CustomCollider
 
     public override bool Ray(Vector3 origin, Vector3 to, ref CustomRayHit outHit)
     {
-        outHit = new CustomRayHit();
         Vector3 rayDirection = new Vector3((to.x - origin.x), (to.y - origin.y), (to.z - origin.z));
         rayDirection.Normalize();
         CustomPlane  plane;
@@ -35,11 +34,17 @@ public class CustomSphereCollider : CustomCollider
         if ((originToSphere < Radius) ||
             (crossPointOnPlaneOffset < Radius && Vector3.Distance(crossPointOnPlane, origin) < Vector3.Distance(origin, to) && !isSphereBesideRay))
         {
-            outHit.IsHit = true;
-            outHit.HitPosition = crossPointOnPlane;
-            outHit.HitCollider = this;
-            outHit.HitObject = this.gameObject;
-            Debug.Log("Ray");
+            float distance = originToCrossPointVector.magnitude;
+            if (outHit.Distance <= 0 || (outHit.Distance > 0 && distance < outHit.Distance))
+            {
+                outHit.IsHit = true;
+                outHit.HitPosition = crossPointOnPlane;
+                outHit.HitCollider = this;
+                outHit.HitObject = this.gameObject;
+                outHit.Distance = distance;
+            }
+
+           // Debug.Log("Ray");
             return true;
            
         }

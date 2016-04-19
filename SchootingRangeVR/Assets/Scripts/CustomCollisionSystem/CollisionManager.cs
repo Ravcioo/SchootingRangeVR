@@ -28,7 +28,12 @@ public class CollisionManager : MonoBehaviour
         colliders.Add(collider);
     }
 
-    void FixedUpdate()
+    public void RemoveCollider(CustomCollider collider)
+    {
+        colliders.Remove(collider);
+    }
+
+    void Update()
     {
         for (int i = 0; i < colliders.Count - 1; i++)
         {

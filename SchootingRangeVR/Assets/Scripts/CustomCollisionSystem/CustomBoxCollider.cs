@@ -31,19 +31,24 @@ public class CustomBoxCollider : CustomCollider
         {
             Debug.LogError("Boxes are currently can be raycasting only if are using as plane");
         }
-        
+
         Vector3 crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection);
         Vector3 originToCrossPointVector = origin - crossPointOnPlane;
         bool isBoxBesideRay = CheckIfIsBeside(originToCrossPointVector, rayDirection);
-        
+
         if (!isBoxBesideRay && CollisionWithPoint(crossPointOnPlane))
         {
-            
-            outHit.IsHit = true;
-            outHit.HitPosition = crossPointOnPlane;
-            outHit.HitCollider = this;
-            outHit.HitObject = this.gameObject;
-            Debug.Log("Ray");
+            float distance = originToCrossPointVector.magnitude;
+            if (outHit.Distance <= 0 || (outHit.Distance > 0 && distance < outHit.Distance))
+            {
+                outHit.IsHit = true;
+                outHit.HitPosition = crossPointOnPlane;
+                outHit.HitCollider = this;
+                outHit.HitObject = this.gameObject;
+                outHit.Distance = distance;
+            }
+
+            // Debug.Log("Ray");
 
             return true;
         }

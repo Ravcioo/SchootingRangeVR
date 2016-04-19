@@ -8,9 +8,14 @@ public abstract class CustomCollider : MonoBehaviour {
     private bool drawCollider = false;
 
     public Vector3 Position { get { return transform.position; } private set{;} }
-    void Awake()
+    void OnEnable()
     {
         CollisionManager.Instance.AddCollider(this);
+    }
+
+    void OnDisable()
+    {
+        CollisionManager.Instance.RemoveCollider(this);
     }
 
     public bool CheckCollision(CustomCollider collider)

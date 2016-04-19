@@ -10,10 +10,12 @@ public class GunShooting : MonoBehaviour {
     [SerializeField]
     private Camera mainCamera;
     [SerializeField]
+    private GameObject viewFinder;
+
+
     private GameObject muzzleFlash;
-
     private AudioSource audioSource;
-
+    private bool isGunEquip = false;
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -21,28 +23,31 @@ public class GunShooting : MonoBehaviour {
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        CustomRay customRay = new CustomRay(mainCamera.transform.position, mainCamera.transform.forward);
+        CustomRayHit customRayHit;
+
+        if (CollisionManager.Instance.Raycast(customRay, out customRayHit))
         {
-            audioSource.Play();
-            ShowMuzzleFlash(muzzleflashTime);
+            viewFinder.transform.position = customRayHit.HitPosition;
 
-            CustomRay customRay = new CustomRay(mainCamera.transform.position, mainCamera.transform.forward);
-            CustomRayHit customRayHit;
 
-            if (CollisionManager.Instance.Raycast(customRay, out customRayHit))
+            if (Input.GetButtonDown("Fire1"))
             {
+                ShotAudio();
+                ShowMuzzleFlash(muzzleflashTime);
 
                 TargetColliderInfo targetColliderInfo = customRayHit.HitObject.GetComponent<TargetColliderInfo>();
-
                 if (targetColliderInfo != null)
                 {
+                    Debug.Log(targetColliderInfo.name);
                     targetColliderInfo.OnHit();
                 }
             }
+        }
 
-            Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
-        }     
-    }
+        Debug.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * 1000, Color.red, 5);
+    } 
+
 
     private void ShowMuzzleFlash(float time)
     {
@@ -51,9 +56,36 @@ public class GunShooting : MonoBehaviour {
 
     private IEnumerator ShowMuzzleFlashCoroutine(float time)
     {
-        muzzleFlash.SetActive(true);
-        yield return new WaitForSeconds(time);
-        muzzleFlash.SetActive(false);
+        if (muzzleFlash!=null)
+        {
+            muzzleFlash.SetActive(true);
+            yield return new WaitForSeconds(time);
+            muzzleFlash.SetActive(false);
+        }
+        else
+        {
+            yield return null;
+        }
+
+    }
+
+    public void ShotAudio()
+    {
+        if (isGunEquip)
+        {
+            audioSource.Play();
+        }
+    }
+    public void EquipGun(GameObject muzzle)
+    {
+        muzzleFlash = muzzle;
+        isGunEquip = true;
+    }
+
+    public void PutDownGun()
+    {
+        muzzleFlash = null;
+        isGunEquip = false;
     }
 	
 }
