@@ -35,7 +35,6 @@ public class CustomBoxCollider : CustomCollider
         Vector3 crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection);
         Vector3 originToCrossPointVector = origin - crossPointOnPlane;
         bool isBoxBesideRay = CheckIfIsBeside(originToCrossPointVector, rayDirection);
-
         if (!isBoxBesideRay && CollisionWithPoint(crossPointOnPlane))
         {
             float distance = originToCrossPointVector.magnitude;
@@ -47,8 +46,6 @@ public class CustomBoxCollider : CustomCollider
                 outHit.HitObject = this.gameObject;
                 outHit.Distance = distance;
             }
-
-            // Debug.Log("Ray");
 
             return true;
         }
@@ -74,10 +71,22 @@ public class CustomBoxCollider : CustomCollider
         return isSphereBesideRay;
     }
     protected override bool CollisionWithPoint(Vector3 point) {
-        bool intersect = (point.x >= this.MinX && point.x <= this.MaxX) &&
+        bool intersect = false;
+        if (transform.rotation.eulerAngles == Vector3.zero)
+        {
+            intersect = (point.x >= this.MinX && point.x <= this.MaxX) &&
                          (point.y >= this.MinY && point.y <= this.MaxY) &&
                          (point.z >= this.MinZ && point.z <= this.MaxZ);
-      
+        }
+        else
+        {
+            float radius = Mathf.Sqrt(Size.x / 2 * Size.x / 2 + Size.y / 2 * Size.y / 2 + Size.z / 2 * Size.z / 2);
+            float distance = Mathf.Sqrt((point.x - this.Position.x) * (point.x - this.Position.x) +
+                  (point.y - this.Position.y) * (point.y - this.Position.y) +
+                  (point.z - this.Position.z) * (point.z - this.Position.z));
+
+            intersect = (distance < radius);
+        }
         return (intersect) ;
     }
     protected override bool CollisionWithSphere(CustomSphereCollider collider)

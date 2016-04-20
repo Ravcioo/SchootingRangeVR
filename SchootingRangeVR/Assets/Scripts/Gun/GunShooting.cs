@@ -28,7 +28,7 @@ public class GunShooting : MonoBehaviour {
 
         if (CollisionManager.Instance.Raycast(customRay, out customRayHit))
         {
-            viewFinder.transform.position = customRayHit.HitPosition;
+            viewFinder.transform.position = customRayHit.HitPosition - mainCamera.transform.forward.normalized;
 
 
             if (Input.GetButtonDown("Fire1"))

@@ -44,7 +44,6 @@ public class CustomSphereCollider : CustomCollider
                 outHit.Distance = distance;
             }
 
-           // Debug.Log("Ray");
             return true;
            
         }
