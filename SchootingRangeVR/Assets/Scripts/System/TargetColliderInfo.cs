@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TargetColliderInfo : MonoBehaviour {
+public class TargetColliderInfo : MonoBehaviour,RaycastHitable {
 
     [SerializeField]
     private int points = 1;
@@ -13,7 +13,7 @@ public class TargetColliderInfo : MonoBehaviour {
         target = GetComponentInParent<Target>();
     }
 
-    public void OnHit()
+    public void OnRaycastHit()
     {
         if(target.isActiveTarget)
         {

@@ -36,11 +36,11 @@ public class GunShooting : MonoBehaviour {
                 ShotAudio();
                 ShowMuzzleFlash(muzzleflashTime);
 
-                TargetColliderInfo targetColliderInfo = customRayHit.HitObject.GetComponent<TargetColliderInfo>();
-                if (targetColliderInfo != null)
+                RaycastHitable hittable = customRayHit.HitObject.GetComponent<RaycastHitable>();
+                if (hittable != null)
                 {
-                    Debug.Log(targetColliderInfo.name);
-                    targetColliderInfo.OnHit();
+                    //Debug.Log(hittable.name);
+                    hittable.OnRaycastHit();
                 }
             }
         }

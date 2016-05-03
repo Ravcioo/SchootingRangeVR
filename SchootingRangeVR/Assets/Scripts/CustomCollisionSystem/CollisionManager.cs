@@ -64,3 +64,8 @@ public class CollisionManager : MonoBehaviour
 
 }
     
+
+public interface RaycastHitable
+{
+    void OnRaycastHit();
+}

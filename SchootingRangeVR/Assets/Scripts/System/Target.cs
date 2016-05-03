@@ -23,8 +23,6 @@ public class Target : MonoBehaviour {
         startPosition = transform.position;
         phase = 1;
         Calculate(phase);
-
-        StartCoroutine(Test());
     }
 
 	void Update ()
@@ -59,7 +57,8 @@ public class Target : MonoBehaviour {
     {
         Hide();
         blockTarget = true;
-        Destroy(this.gameObject);
+
+        ShootingRangeSystem.Instance.TargetHitted();
     }
 
 
