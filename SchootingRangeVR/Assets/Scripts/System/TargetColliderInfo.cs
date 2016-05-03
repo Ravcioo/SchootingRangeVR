@@ -13,13 +13,14 @@ public class TargetColliderInfo : MonoBehaviour,RaycastHitable {
         target = GetComponentInParent<Target>();
     }
 
-    public void OnRaycastHit()
+    public void OnRaycastHit(CustomRayHit rayHit)
     {
         if(target.isActiveTarget)
         {
             ShootingRangeSystem.Instance.AddPoints(points);
             GetComponent<AudioSource>().Play();
             target.OnHit();
+            ParticleSystemFactory.Instance.GetTargetParticleSystem(rayHit.HitPosition).Run(true);
         }
         
     }

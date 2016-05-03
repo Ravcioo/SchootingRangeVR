@@ -46,7 +46,7 @@ public class ShootingRangeSystem : Singleton<ShootingRangeSystem> {
                 targetCounter++;
             }
 
-            if(targetCounter>targetCount)
+            if(targetCounter>=targetCount)
             {
                 TurnOff();
             }

@@ -57,7 +57,6 @@ public class Target : MonoBehaviour {
     {
         Hide();
         blockTarget = true;
-
         ShootingRangeSystem.Instance.TargetHitted();
     }
 

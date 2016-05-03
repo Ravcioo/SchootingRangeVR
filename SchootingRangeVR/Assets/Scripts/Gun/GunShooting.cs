@@ -40,7 +40,7 @@ public class GunShooting : MonoBehaviour {
                 if (hittable != null)
                 {
                     //Debug.Log(hittable.name);
-                    hittable.OnRaycastHit();
+                    hittable.OnRaycastHit(customRayHit);
                 }
             }
         }

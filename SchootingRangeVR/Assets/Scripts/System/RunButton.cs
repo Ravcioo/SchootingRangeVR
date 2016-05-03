@@ -3,8 +3,9 @@ using System.Collections;
 
 public class RunButton : MonoBehaviour,RaycastHitable {
 
-    public void OnRaycastHit()
+    public void OnRaycastHit(CustomRayHit rayHit)
     {
         ShootingRangeSystem.Instance.RunButton();
+        GetComponent<CustomParticleSystem>().Run();
     }
 }
