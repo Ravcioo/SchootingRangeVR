@@ -41,7 +41,12 @@ public class CollisionManager : MonoBehaviour
             {
                 if (colliders[i].gameObject.activeInHierarchy && colliders[j].gameObject.activeInHierarchy)
                 {
-                    colliders[i].CheckCollision(colliders[j]);
+                    bool result = colliders[i].CheckCollision(colliders[j]);
+                    if (result)
+                    {
+                        colliders[i].SendMessage("OnCustomCollision", colliders[j],SendMessageOptions.DontRequireReceiver);
+                        colliders[j].SendMessage("OnCustomCollision", colliders[i], SendMessageOptions.DontRequireReceiver);
+                    }
                 }
             }
         }

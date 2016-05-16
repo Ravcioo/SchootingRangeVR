@@ -29,7 +29,7 @@ public class CustomBoxCollider : CustomCollider
         }
         else
         {
-            Debug.LogError("Boxes are currently can be raycasting only if are using as plane");
+            Debug.LogWarning("Boxes are currently can be raycasting only if are using as plane");
         }
 
         Vector3 crossPointOnPlane = plane.GetProjectionOfLine(origin, rayDirection);
